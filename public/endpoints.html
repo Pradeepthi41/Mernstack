@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Social Media API</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 40px;
+    }
+    button {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Social Media API Endpoints</h1>
+
+  <h2>GET /api/users</h2>
+  <button id="fetchUsersBtn">Fetch Users</button>
+  <div id="usersOutput">[users will appear here]</div>
+
+  <h2>GET /api/posts</h2>
+  <button id="fetchPostsBtn">Fetch Posts</button>
+  <div id="postsOutput">[posts will appear here]</div>
+
+  <script>
+    const API_BASE_URL = "http://localhost:5001";
+
+    document.getElementById("fetchUsersBtn").addEventListener("click", async () => {
+      const usersOutput = document.getElementById("usersOutput");
+      usersOutput.innerText = "Loading users...";
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/users`);
+        const users = await res.json();
+        usersOutput.innerHTML = "<ul>" + users.map(user => `<li>${user.username} (${user.email})</li>`).join("") + "</ul>";
+      } catch (err) {
+        usersOutput.innerHTML = "❌ Error fetching users.";
+        console.error(err);
+      }
+    });
+
+    document.getElementById("fetchPostsBtn").addEventListener("click", async () => {
+      const postsOutput = document.getElementById("postsOutput");
+      postsOutput.innerText = "Loading posts...";
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/posts`);
+        const posts = await res.json();
+        postsOutput.innerHTML = "<ul>" + posts.map(post => `<li>${post.content} (User ID: ${post.user})</li>`).join("") + "</ul>";
+      } catch (err) {
+        postsOutput.innerHTML = "❌ Error fetching posts.";
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
